@@ -10,15 +10,15 @@
         }
     ],
     "require": {
-      "php": ">=5.5.9",
+      "php": "^7.3|^8.0",
       "ext-soap": "*"
     },
     "require-dev": {
-        "illuminate/support": "~5.0",
-        "illuminate/validation": "~5.0",
-        "mockery/mockery": "dev-master",
+        "illuminate/support": "^6.3|^7.0|^8.0",
+        "illuminate/validation": "^6.3|^7.0|^8.0",
+        "mockery/mockery": "^1.4",
         "orchestra/testbench": "~3.0",
-        "phpunit/phpunit": "4.7.*"
+        "phpunit/phpunit": "^9.0"
     },
     "autoload": {
         "classmap": [
