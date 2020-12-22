@@ -10,17 +10,19 @@
         }
     ],
     "require": {
-      "php": ">=5.5.9"
+      "php": ">=5.5.9",
+      "ext-soap": "*"
     },
     "require-dev": {
         "illuminate/support": "~5.0",
         "illuminate/validation": "~5.0",
-        "phpunit/phpunit": "4.7.*",
-        "mockery/mockery": "dev-master"
+        "mockery/mockery": "dev-master",
+        "orchestra/testbench": "~3.0",
+        "phpunit/phpunit": "4.7.*"
     },
     "autoload": {
         "classmap": [
-            "src/controllers/"
+            "src/controllers/Controller.php"
         ],
         "psr-0": {
             "Mpociot\\VatCalculator": "src/"
@@ -29,5 +31,15 @@
     "minimum-stability": "stable",
     "scripts": {
         "test": "phpunit"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Mpociot\\VatCalculator\\VatCalculatorServiceProvider"
+            ],
+            "aliases": {
+                "VatCalculator": "Mpociot\\VatCalculator\\Facades\\VatCalculator"
+            }
+        }
     }
 }

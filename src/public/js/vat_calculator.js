@@ -8,7 +8,7 @@
     function bindCalculatorEvents() {
         var form = document.querySelector(VATCalculator.selector);
         if (form !== null) {
-            var dropDown = form.querySelector('[' + DATA_PREFIX + '="country"]');
+            var dropDown = form.querySelector('select[' + DATA_PREFIX + '="country"]');
             if (dropDown !== null) {
                 dropDown.addEventListener('change', calculate);
                 // Try to preselect based on the user IP
@@ -26,6 +26,10 @@
             var vatNumber = form.querySelector('[' + DATA_PREFIX + '="vat-number"]');
             if (vatNumber !== null) {
                 vatNumber.addEventListener('blur', calculate);
+            }
+            var postalCode = form.querySelector('[' + DATA_PREFIX + '="postal-code"]');
+            if (postalCode !== null) {
+                postalCode.addEventListener('blur', calculate);
             }
             // Trigger now
             calculate();
@@ -112,18 +116,24 @@
 
     /**
      * Calculate the gross price
+     * @param successCallback
      */
-    function calculate() {
+    function calculate(successCallback) {
         var form = document.querySelector(VATCalculator.selector);
         if (form !== null) {
             var amount = parseInt(form.getAttribute('data-amount')),
                 country = getValue('country'),
+                postal_code = getValue('postal-code'),
                 vat_number = getValue('vat-number');
-            makeRequest('GET', '/vatcalculator/calculate?netPrice=' + (amount / 100) + '&country=' + country + '&vat_number=' + vat_number, {
+            makeRequest('GET', '/vatcalculator/calculate?netPrice=' + (amount / 100) + '&country=' + country + '&postal_code=' + postal_code + '&vat_number=' + vat_number, {
                 success: function (status, response) {
-                    setHTML('total', response.gross_price.toFixed(2));
-                    setHTML('subtotal', response.net_price.toFixed(2));
-                    setHTML('taxes', response.tax_value.toFixed(2));
+                    setHTML('total', VATCalculator.formatCurrency(response.gross_price));
+                    setHTML('subtotal', VATCalculator.formatCurrency(response.net_price));
+                    setHTML('taxes', VATCalculator.formatCurrency(response.tax_value));
+                    setHTML('taxrate', (100*response.tax_rate).toFixed(0));
+                    if (successCallback && typeof(successCallback) === 'function') {
+                        successCallback(response);
+                    }
                     VATCalculator.setCalculation(response);
                 },
                 error: function (status, response) {
@@ -145,6 +155,15 @@
          * @type {Object}
          */
         this.calculation = {};
+
+        /**
+         * Function to use to format calculation
+         * results for HTML output.
+         * @type {Function}
+         */
+        this.currencyFormatter = function(value){
+            return value.toFixed(2);
+        };
     };
 
     Calculator.prototype = {
@@ -175,9 +194,10 @@
 
         /**
          * Perform the calculation task
+         * @param {function} successCallback
          */
-        calculate: function () {
-            calculate();
+        calculate: function (successCallback) {
+            calculate(successCallback);
         },
 
         /**
@@ -195,6 +215,25 @@
          */
         setSelector: function (selector) {
             return this.selector = selector;
+        },
+
+        /**
+         * Format the calculated values
+         *
+         * @param value
+         * @returns {string}
+         */
+        formatCurrency: function (value) {
+            return this.currencyFormatter(value);
+        },
+
+        /**
+         * Override the currency formatter function
+         *
+         * @param {Function} callback
+         */
+        setCurrencyFormatter: function (callback) {
+            this.currencyFormatter = callback;
         },
 
         /**
