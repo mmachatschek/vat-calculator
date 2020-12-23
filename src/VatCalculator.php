@@ -13,7 +13,7 @@ class VatCalculator
     /**
      * VAT Service check URL provided by the EU.
      */
-    const VAT_SERVICE_URL = 'http://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl';
+    const VAT_SERVICE_URL = 'https://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl';
 
     /**
      * We're using the free ip2c service to lookup IP 2 country.
