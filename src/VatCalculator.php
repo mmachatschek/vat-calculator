@@ -1,9 +1,10 @@
 <?php
 
-namespace Mpociot\VatCalculator;
+namespace Machatschek\VatCalculator;
 
+use GuzzleHttp\Client;
 use Illuminate\Contracts\Config\Repository;
-use Mpociot\VatCalculator\Exceptions\VATCheckUnavailableException;
+use Machatschek\VatCalculator\Exceptions\VATCheckUnavailableException;
 use SoapClient;
 use SoapFault;
 
@@ -12,12 +13,12 @@ class VatCalculator
     /**
      * VAT Service check URL provided by the EU.
      */
-    const VAT_SERVICE_URL = 'http://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl';
+    const VAT_SERVICE_URL = 'https://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl';
 
     /**
      * We're using the free ip2c service to lookup IP 2 country.
      */
-    const GEOCODE_SERVICE_URL = 'http://ip2c.org/';
+    const GEOCODE_SERVICE_URL = 'https://api.ip2country.info/ip?';
 
     protected $soapClient;
 
@@ -422,18 +423,24 @@ class VatCalculator
      */
     public function getIPBasedCountry()
     {
+        $countryCode = false;
         $ip = $this->getClientIP();
-        $url = self::GEOCODE_SERVICE_URL.$ip;
-        $result = file_get_contents($url);
-        switch ($result[0]) {
-            case '1':
-                $data = explode(';', $result);
 
-                return $data[1];
-                break;
-            default:
-                return false;
+        if ($ip !== '') {
+            $url = self::GEOCODE_SERVICE_URL.$ip;
+
+            $client = new Client();
+            $response = $client->get($url);
+
+            if ($response->getStatusCode() === 200) {
+                $json = json_decode($response->getBody(), true);
+                if (array_key_exists('countryCode', $json)) {
+                    $countryCode = $json['countryCode'];
+                }
+            }
         }
+
+        return $countryCode;
     }
 
     /**
@@ -505,7 +512,7 @@ class VatCalculator
             $this->setCompany($company);
         }
 
-        $this->value = floatval($gross);
+        $this->value = (float)$gross;
         $this->taxRate = $this->getTaxRateForLocation($this->getCountryCode(), $this->getPostalCode(), $this->isCompany(), $type);
         $this->taxValue = $this->taxRate > 0 ? $this->value / (1 + $this->taxRate) * $this->taxRate : 0;
         $this->netPrice = $this->value - $this->taxValue;

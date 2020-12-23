@@ -1,8 +1,8 @@
 <?php
 
-namespace Mpociot\VatCalculator\Traits;
+namespace Machatschek\VatCalculator\Traits;
 
-use Mpociot\VatCalculator\Facades\VatCalculator;
+use Machatschek\VatCalculator\Facades\VatCalculator;
 
 trait BillableWithinTheEU
 {

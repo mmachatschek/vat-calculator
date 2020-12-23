@@ -1,6 +1,6 @@
 <?php
 
-namespace Mpociot\VatCalculator\Exceptions;
+namespace Machatschek\VatCalculator\Exceptions;
 
 use Exception;
 

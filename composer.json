@@ -1,45 +1,58 @@
 {
-    "name": "mpociot/vat-calculator",
+    "name": "mmachatschek/vat-calculator",
     "description": "EU VAT calculation, the way it should be.",
-    "keywords": ["VAT","Tax","EU MOSS", "VAT ID", "tax calculation", "vat calculation", "cashier"],
+    "keywords": [
+        "VAT",
+        "Tax",
+        "EU MOSS",
+        "VAT ID",
+        "tax calculation",
+        "vat calculation",
+        "cashier"
+    ],
     "license": "MIT",
     "authors": [
         {
             "name": "Marcel Pociot",
             "email": "m.pociot@gmail.com"
+        },
+        {
+            "name": "Markus Machatschek",
+            "email": "markus.machatschek@hey.com"
         }
     ],
     "require": {
-      "php": ">=5.5.9",
-      "ext-soap": "*"
+        "php": "^7.3|^8.0",
+        "ext-soap": "*",
+        "ext-json": "*",
+        "guzzlehttp/guzzle": "^7.0.1"
     },
     "require-dev": {
-        "illuminate/support": "~5.0",
-        "illuminate/validation": "~5.0",
-        "mockery/mockery": "dev-master",
-        "orchestra/testbench": "~3.0",
-        "phpunit/phpunit": "4.7.*"
+        "illuminate/support": "^6.3|^7.0|^8.0",
+        "illuminate/validation": "^6.3|^7.0|^8.0",
+        "mockery/mockery": "^1.4",
+        "orchestra/testbench": "^6.3",
+        "phpunit/phpunit": "^9.0"
     },
     "autoload": {
-        "classmap": [
-            "src/controllers/Controller.php"
-        ],
-        "psr-0": {
-            "Mpociot\\VatCalculator": "src/"
+        "psr-4": {
+            "Machatschek\\VatCalculator\\": "src"
         }
     },
-    "minimum-stability": "stable",
-    "scripts": {
-        "test": "phpunit"
+    "autoload-dev": {
+        "psr-4": {
+            "Machatschek\\VatCalculator\\Tests\\": "tests"
+        }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "Mpociot\\VatCalculator\\VatCalculatorServiceProvider"
+                "Machatschek\\VatCalculator\\VatCalculatorServiceProvider"
             ],
             "aliases": {
-                "VatCalculator": "Mpociot\\VatCalculator\\Facades\\VatCalculator"
+                "VatCalculator": "Machatschek\\VatCalculator\\Facades\\VatCalculator"
             }
         }
-    }
+    },
+    "prefer-stable": true
 }
