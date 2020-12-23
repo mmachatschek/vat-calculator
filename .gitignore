@@ -1,5 +1,7 @@
 # composer
-/vendor/
+/vendor
+/tmp
 phpunit.xml
 composer.lock
 .phpunit.result.cache
+coverage.xml

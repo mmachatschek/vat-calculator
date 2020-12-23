@@ -16,8 +16,8 @@ class BillableWithinTheEUTraitTest extends TestCase
             ->andReturn(0);
 
         $billable = new BillableWithinTheEUTraitTestStub();
-        $taxPercent = $billable->getTaxPercent();
-        $this->assertEquals(0, $taxPercent);
+        $this->assertEquals(0, $billable->getTaxPercent());
+        $this->assertEquals(0, $billable->taxPercentage());
     }
 
     public function testTaxPercentGetsCalculated()

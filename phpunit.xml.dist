@@ -7,6 +7,10 @@
         <include>
             <directory>src</directory>
         </include>
+        <report>
+            <clover outputFile="./coverage.xml"/>
+            <text outputFile="php://stdout"/>
+        </report>
     </coverage>
     <testsuites>
         <testsuite name="VatCalculator Suite">
