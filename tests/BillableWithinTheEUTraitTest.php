@@ -1,19 +1,13 @@
 <?php
 
-namespace Mpociot\VatCalculator\Tests;
+namespace Machatschek\VatCalculator\Tests;
 
+use Machatschek\VatCalculator\Traits\BillableWithinTheEU;
 use Mockery as m;
-use Mpociot\VatCalculator\Facades\VatCalculator;
-use PHPUnit_Framework_TestCase as PHPUnit;
+use Machatschek\VatCalculator\Facades\VatCalculator;
 
-class BillableWithinTheEUTraitTest extends PHPUnit
+class BillableWithinTheEUTraitTest extends TestCase
 {
-    public function tearDown()
-    {
-        VatCalculator::clearResolvedInstances();
-        m::close();
-    }
-
     public function testTaxPercentZeroByDefault()
     {
         VatCalculator::shouldReceive('getTaxRateForCountry')
@@ -92,5 +86,5 @@ class BillableWithinTheEUTraitTest extends PHPUnit
 
 class BillableWithinTheEUTraitTestStub
 {
-    use \Mpociot\VatCalculator\Traits\BillableWithinTheEU;
+    use BillableWithinTheEU;
 }
