@@ -11,7 +11,7 @@ class BillableWithinTheEUTraitTest extends TestCase
     public function testTaxPercentZeroByDefault()
     {
         VatCalculator::shouldReceive('getTaxRateForCountry')
-            ->once()
+            ->twice()
             ->with(null, false)
             ->andReturn(0);
 
